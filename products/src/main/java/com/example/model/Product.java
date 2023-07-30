@@ -4,12 +4,14 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 
-@Data
+import java.math.BigDecimal;
+
 @Builder
-public class Customer {
+@Data
+public class Product {
     @Id
     private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
+    private String name;
+    private String description;
+    private BigDecimal price;
 }

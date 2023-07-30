@@ -2,22 +2,31 @@ package com.example.controller;
 
 import com.example.dto.CustomerRegistrationRequest;
 import com.example.model.Customer;
-import org.springframework.stereotype.Controller;
+import com.example.service.CustomerService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/customer")
-public record CustomerController() {
+public record CustomerController(
+        CustomerService customerService
+) {
 
-    @PostMapping("")
-    public void registrationUser(
-            CustomerRegistrationRequest requestUser
-    ) {
-        Customer user = Customer.builder()
-                .firstName(requestUser.getFirstName())
-                .lastName(requestUser.getLastName())
-                .email(requestUser.getEmail())
+    @GetMapping("")
+    public Customer getPrepareUser() {
+        return Customer.builder()
+                .firstName("Данил")
+                .lastName("Курдюков")
+                .email("testEmail@mail")
                 .build();
     }
+
+    @PostMapping("/registration")
+    public int registrationUser(CustomerRegistrationRequest customerRegistrationRequest) {
+        return customerService.addCustomer(customerRegistrationRequest);
+    }
+
+
 }
