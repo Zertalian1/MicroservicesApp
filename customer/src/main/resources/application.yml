@@ -4,7 +4,7 @@ spring:
   application:
     name: customer
   datasource:
-    username: postgres
+    username: zertallian
     password: password
-    url: jdbc:postgresql://localhost:5433/customer
+    url: jdbc:postgresql://localhost:5432/customerDB
     driver-class-name: org.postgresql.Driver
