@@ -7,16 +7,16 @@ import com.example.mappers.CustomerRegistrationDtoMapper;
 import com.example.model.Customer;
 import com.example.repository.CustomerRepository;
 import com.example.repository.CustomerRepositoryJdbcTemplates;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
-public record CustomerServiceImpl(
-        CustomerRepositoryJdbcTemplates customerRepositoryJdbcTemplates,
-        CustomerRepository customerRepository
-) implements CustomerService {
-
+@RequiredArgsConstructor
+public final class CustomerServiceImpl implements CustomerService {
+    private final CustomerRepositoryJdbcTemplates customerRepositoryJdbcTemplates;
+    private final CustomerRepository customerRepository;
 
     @Override
     public int addCustomer(CustomerRegistrationDto customerRegistrationDto) {
@@ -28,6 +28,5 @@ public record CustomerServiceImpl(
         Page<Customer> customers = customerRepository.findAll(pageable);
         return customers.map(CustomerInfoDtoMapper::toDto);
     }
-
 
 }
