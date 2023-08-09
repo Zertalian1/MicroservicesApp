@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CustomerService {
 
-    int addCustomer(CustomerRegistrationDto customerRegistrationDto);
+    Long addCustomer(CustomerRegistrationDto customerRegistrationDto);
 
     Page<CustomerInfoDto> getAllCustomers(Pageable pageable);
 

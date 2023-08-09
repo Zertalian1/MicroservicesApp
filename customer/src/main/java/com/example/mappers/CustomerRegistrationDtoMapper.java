@@ -7,9 +7,9 @@ public class CustomerRegistrationDtoMapper {
 
     public static Customer toEntity(CustomerRegistrationDto dto) {
         return Customer.builder()
-                .firstName(dto.getFirstName())
-                .lastName(dto.getLastName())
-                .email(dto.getEmail())
+                .firstName(dto.firstName())
+                .lastName(dto.lastName())
+                .email(dto.email())
                 .build();
     }
 }

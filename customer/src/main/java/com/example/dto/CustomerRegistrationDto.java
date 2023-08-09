@@ -1,12 +1,9 @@
 package com.example.dto;
 
-import lombok.Builder;
-import lombok.Data;
+public record CustomerRegistrationDto (
+    String firstName,
+    String lastName,
+    String email
+) {
 
-@Data
-@Builder
-public final class CustomerRegistrationDto {
-    private final String firstName;
-    private final String lastName;
-    private final String email;
 }

@@ -22,7 +22,9 @@ public class Order {
     @Nullable
     private LocalDateTime completedDate;
     private String comment;
-    private Long customerId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private List<OrderedProduct> productsList = new ArrayList<>();

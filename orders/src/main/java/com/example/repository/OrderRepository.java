@@ -14,5 +14,4 @@ public interface OrderRepository extends PagingAndSortingRepository<Order, Long>
 
     Page<Order> getOrdersByCustomerIdIn(List<Long> customersIdList, Pageable pageable);
 
-
 }

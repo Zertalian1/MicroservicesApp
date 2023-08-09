@@ -15,7 +15,7 @@ public class OrderedProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ordered_product_id")
     private Long id;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
     private BigDecimal price;

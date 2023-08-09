@@ -17,7 +17,7 @@ import java.util.List;
 public record CustomerController(CustomerService customerService) {
 
     @PostMapping("/add")
-    public int registrationUser(@RequestBody CustomerRegistrationDto customerRegistrationDto) {
+    public Long registrationUser(@RequestBody CustomerRegistrationDto customerRegistrationDto) {
         return customerService.addCustomer(customerRegistrationDto);
     }
 
