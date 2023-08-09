@@ -2,6 +2,7 @@ package com.example.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,22 +15,16 @@ import java.util.List;
 @Table(name = "orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "pet_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_id")
     private Long id;
     private LocalDateTime orderDate;
+    @Nullable
     private LocalDateTime completedDate;
     private String comment;
     private Long customerId;
-    @ManyToMany(
-            cascade = {CascadeType.ALL},
-            fetch = FetchType.EAGER
-    )
-    @JoinTable(
-            name = "orders_ordered_products",
-            joinColumns = {@JoinColumn(name = "orders_id")},
-            inverseJoinColumns = {@JoinColumn(name = "ordered_products_id")}
-    )
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
     private List<OrderedProduct> productsList = new ArrayList<>();
 
     @PrePersist

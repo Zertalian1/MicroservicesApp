@@ -5,7 +5,7 @@ import com.example.model.Order;
 
 public class OrderInfoDtoMapper {
 
-    static OrderInfoDto toDto(Order entity) {
+    public static OrderInfoDto toDto(Order entity) {
         return new OrderInfoDto(
                 entity.getId(),
                 entity.getOrderDate(),
