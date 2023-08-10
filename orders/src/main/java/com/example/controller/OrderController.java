@@ -4,12 +4,12 @@ import com.example.dto.CreateOrderDto;
 import com.example.dto.OrderFilterDto;
 import com.example.dto.OrderInfoDto;
 import com.example.model.Customer;
-import com.example.model.Order;
 import com.example.service.CustomerService;
 import com.example.service.OrderService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,10 +20,16 @@ public record OrderController(
 ) {
 
     @PostMapping(value = "/add")
-    public Order addNewOrder(
+    public Long addNewOrder(
             @RequestBody CreateOrderDto order
     ) {
         return orderService.addOrder(order);
+    }
+
+    @PostMapping(value = "/completed")
+    public HttpStatus markOrderCompleted(
+    ) {
+        return HttpStatus.OK;
     }
 
     @PostMapping(value = "/add-customer")
@@ -38,6 +44,13 @@ public record OrderController(
             @PageableDefault Pageable pageable
     ) {
         return orderService.getAllOrders(pageable);
+    }
+
+    @GetMapping("/{orderId}")
+    public OrderInfoDto getOrderById(
+            @PathVariable Long orderId
+    ) {
+        return orderService.getOrderById(orderId);
     }
 
     @PostMapping(value = "", headers = "filter=true")

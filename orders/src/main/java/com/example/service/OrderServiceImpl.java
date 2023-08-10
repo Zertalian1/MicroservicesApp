@@ -35,11 +35,20 @@ public record OrderServiceImpl(
     }
 
     @Override
-    public Order addOrder(CreateOrderDto orderDto) {
+    public Long addOrder(CreateOrderDto orderDto) {
         Order newOrder = new Order();
         newOrder.setComment(orderDto.getComment());
         newOrder.setCustomer(customerService.getCustomerById(orderDto.getCustomerId()));
         newOrder.getProductsList().addAll(productService.createOrderedProductByProductId(orderDto.getProductsIdList()));
-        return orderRepository.save(newOrder);
+        return orderRepository.save(newOrder).getId();
+    }
+
+    @Override
+    public OrderInfoDto getOrderById(Long orderId) {
+        return OrderInfoDtoMapper.toDto(
+                orderRepository.findById(orderId).orElseThrow(
+                        () -> new RuntimeException("Can not find order")
+                )
+        );
     }
 }

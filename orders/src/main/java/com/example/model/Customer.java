@@ -7,9 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@NoArgsConstructor
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "customers")
 public class Customer {
     @Id
