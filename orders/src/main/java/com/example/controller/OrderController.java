@@ -6,6 +6,7 @@ import com.example.dto.OrderInfoDto;
 import com.example.model.Customer;
 import com.example.service.CustomerService;
 import com.example.service.OrderService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,9 +16,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/orders")
 public record OrderController(
-    OrderService orderService,
-    CustomerService customerService
+        OrderService orderService,
+        CustomerService customerService,
+        RabbitTemplate rabbitTemplate
 ) {
+
+    @GetMapping("/test")
+    @ResponseBody
+    String queue1() {
+
+        rabbitTemplate.convertAndSend("notificationQueue","Message to queue");
+        return "Emit to queue";
+    }
 
     @PostMapping(value = "/add")
     public Long addNewOrder(

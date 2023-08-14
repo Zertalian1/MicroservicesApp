@@ -21,7 +21,6 @@ public class Consumer {
 
     @KafkaListener(topics = orderTopic)
     public void consumeMessage(String message) throws JsonProcessingException {
-
         Customer customer = objectMapper.readValue(message, Customer.class);
         customerService.addCustomer(customer);
     }

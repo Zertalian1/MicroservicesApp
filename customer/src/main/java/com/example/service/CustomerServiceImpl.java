@@ -5,7 +5,7 @@ import com.example.dto.CustomerInfoDto;
 import com.example.dto.CustomerRegistrationDto;
 import com.example.mappers.CustomerInfoDtoMapper;
 import com.example.mappers.CustomerRegistrationDtoMapper;
-import com.example.messageQueue.OrderProducer;
+import com.example.messageQueue.KafkaOrderProducer;
 import com.example.model.Customer;
 import com.example.repository.CustomerRepository;
 import com.example.repository.CustomerRepositoryJdbcTemplates;
@@ -32,7 +32,7 @@ public final class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
-    private final OrderProducer orderProducer;
+    private final KafkaOrderProducer kafkaOrderProducer;
 
     @Override
     public Long addCustomer(CustomerRegistrationDto customerRegistrationDto) {
@@ -55,7 +55,7 @@ public final class CustomerServiceImpl implements CustomerService {
             }
         } catch (Exception e) {
             try {
-                orderProducer.sendMessage(savedCustomer);
+                kafkaOrderProducer.sendMessage(savedCustomer);
             } catch (JsonProcessingException ex) {
                 throw new RuntimeException("filed to add client to queue");
             }
