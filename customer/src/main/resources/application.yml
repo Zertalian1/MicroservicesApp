@@ -8,3 +8,6 @@ spring:
     password: password
     url: jdbc:postgresql://localhost:5432/customerDB
     driver-class-name: org.postgresql.Driver
+
+topic:
+  name: t.client.action

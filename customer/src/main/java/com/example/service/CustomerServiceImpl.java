@@ -5,9 +5,11 @@ import com.example.dto.CustomerInfoDto;
 import com.example.dto.CustomerRegistrationDto;
 import com.example.mappers.CustomerInfoDtoMapper;
 import com.example.mappers.CustomerRegistrationDtoMapper;
+import com.example.messageQueue.OrderProducer;
 import com.example.model.Customer;
 import com.example.repository.CustomerRepository;
 import com.example.repository.CustomerRepositoryJdbcTemplates;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,7 @@ public final class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
+    private final OrderProducer orderProducer;
 
     @Override
     public Long addCustomer(CustomerRegistrationDto customerRegistrationDto) {
@@ -51,8 +54,12 @@ public final class CustomerServiceImpl implements CustomerService {
                 throw new RuntimeException("filed to save client");
             }
         } catch (Exception e) {
-            throw new RuntimeException("filed to forward clients");
-            // добавить добавление записи в REDIS
+            try {
+                orderProducer.sendMessage(savedCustomer);
+            } catch (JsonProcessingException ex) {
+                throw new RuntimeException("filed to add client to queue");
+            }
+            throw new RuntimeException("filed to forward client");
         }
         return savedCustomer.getId();
     }
