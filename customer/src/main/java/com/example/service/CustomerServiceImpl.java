@@ -11,6 +11,8 @@ import com.example.repository.CustomerRepository;
 import com.example.repository.CustomerRepositoryJdbcTemplates;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,7 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 @RequiredArgsConstructor
 public final class CustomerServiceImpl implements CustomerService {
     private final CustomerRepositoryJdbcTemplates customerRepositoryJdbcTemplates;
+    private final EurekaClient discoveryClient;
     private final CustomerRepository customerRepository;
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
@@ -38,6 +41,7 @@ public final class CustomerServiceImpl implements CustomerService {
     public Long addCustomer(CustomerRegistrationDto customerRegistrationDto) {
         Customer savedCustomer = customerRepository.save(CustomerRegistrationDtoMapper.toEntity(customerRegistrationDto));
         try {
+            final InstanceInfo instance = discoveryClient.getNextServerFromEureka("orders-service", false);
             HttpRequest request = HttpRequest.newBuilder()
                     .POST(
                             HttpRequest.BodyPublishers.ofString(
@@ -46,7 +50,7 @@ public final class CustomerServiceImpl implements CustomerService {
                     )
                     .header("Content-Type", "application/json")
                     .timeout(Duration.of(2, SECONDS))
-                    .uri(URI.create("http://localhost:8081/orders/add-customer"))
+                    .uri(URI.create(instance.getHomePageUrl()+"/orders/add-customer"))
                     .build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200){
