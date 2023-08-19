@@ -35,14 +35,13 @@ public class AuthenticationController {
         return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 
-    @GetMapping("/test")
-    public String test(){
-        return "Test";
-    }
-
-    @GetMapping("/secure-test")
-    public String secureTest(){
-        return "secureTest";
+    @GetMapping("/validate")
+    public HttpStatus validateToken(@RequestParam("token") String token) {
+        if (service.validateUser(token)){
+            return HttpStatus.OK;
+        } else {
+            return HttpStatus.BAD_REQUEST;
+        }
     }
 
 }

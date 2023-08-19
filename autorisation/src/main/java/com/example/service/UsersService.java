@@ -7,6 +7,8 @@ import com.example.model.User;
 import com.example.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +38,14 @@ public record UsersService(
         );
         User user = userRepository.findUserByUsername(request.getUserName()).orElseThrow();
         return jwtService.generateToken(user);
+    }
+
+    public boolean validateUser(String token) {
+        final String userName = jwtService.extractUsername(token);
+        if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userRepository.findUserByUsername(userName).orElse(null);
+            return userDetails != null && jwtService.isTokenValid(token, userDetails);
+        }
+        return false;
     }
 }
