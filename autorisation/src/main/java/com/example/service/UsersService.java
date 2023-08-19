@@ -2,7 +2,6 @@ package com.example.service;
 
 import com.example.config.JwtService;
 import com.example.dto.AuthenticationRequest;
-import com.example.dto.AuthenticationResponse;
 import com.example.dto.RegisterRequest;
 import com.example.model.User;
 import com.example.repository.UserRepository;
@@ -28,7 +27,7 @@ public record UsersService(
         userRepository.save(user);
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public String authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUserName(),
@@ -36,7 +35,6 @@ public record UsersService(
                 )
         );
         User user = userRepository.findUserByUsername(request.getUserName()).orElseThrow();
-        String token = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(token).build();
+        return jwtService.generateToken(user);
     }
 }
