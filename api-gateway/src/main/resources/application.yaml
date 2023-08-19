@@ -1,0 +1,22 @@
+server:
+    port: 8080
+
+spring:
+    cloud:
+        gateway:
+            httpclient:
+                ssl:
+                    useInsecureTrustManager: true
+            routes:
+                - id: customer
+                  uri: http://localhost:8081
+                  predicates:
+                      - Path=/customers/**
+                - id: orders
+                  uri: http://localhost:8083
+                  predicates:
+                      - Path=/orders/**
+                - id: products
+                  uri: http://localhost:8084
+                  predicates:
+                      - Path=/products/**
