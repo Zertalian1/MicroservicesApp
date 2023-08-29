@@ -12,14 +12,20 @@ spring:
                   uri: http://localhost:8081
                   predicates:
                       - Path=/customers/**
+                  filters:
+                    - AuthenticationFilter
                 - id: orders
                   uri: http://localhost:8083
                   predicates:
                       - Path=/orders/**
+                  filters:
+                    - AuthenticationFilter
                 - id: products
                   uri: http://localhost:8084
                   predicates:
                       - Path=/products/**
+                  filters:
+                    - AuthenticationFilter
                 - id: security
                   uri: http://localhost:8085
                   predicates:

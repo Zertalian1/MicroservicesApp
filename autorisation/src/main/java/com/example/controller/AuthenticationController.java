@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/security")
 @RequiredArgsConstructor
 public class AuthenticationController {
 
@@ -25,6 +26,12 @@ public class AuthenticationController {
         return HttpStatus.OK;
     }
 
+    @GetMapping("/register")
+    public String getRegisterPage(
+    ) {
+        return "Страница регистрации";
+    }
+
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request
@@ -35,13 +42,26 @@ public class AuthenticationController {
         return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 
-    @GetMapping("/validate")
-    public HttpStatus validateToken(@RequestParam("token") String token) {
-        if (service.validateUser(token)){
+    @GetMapping("/authenticate")
+    public String getAuthenticatePage(
+    ) {
+       return "Страница входа";
+    }
+
+    @PostMapping("/validate")
+    public HttpStatus validateToken(
+            @RequestParam("token") String token
+    ) {
+        if (!service.validateUser(token)){
             return HttpStatus.OK;
         } else {
             return HttpStatus.BAD_REQUEST;
         }
     }
 
+    @GetMapping("/test")
+    public HttpStatus test() {
+        System.out.println("Test");
+        return HttpStatus.OK;
+    }
 }
