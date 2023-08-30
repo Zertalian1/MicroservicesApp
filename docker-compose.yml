@@ -5,7 +5,54 @@ networks:
     name: kafka-net
     driver: bridge
 
+
 services:
+
+  api-gateway:
+    build:
+      context: /api-gateway
+      dockerfile: Dockerfile
+    container_name: 'api-gateway-service'
+    ports:
+      - 8080:8080
+
+  autorisation:
+    build:
+      context: /authorisation
+      dockerfile: Dockerfile
+    container_name: 'autorisation-service'
+
+  customer:
+    build:
+      context: /customer
+      dockerfile: Dockerfile
+    container_name: 'customer-service'
+
+  eureka-server:
+    build:
+      context: /eureka-server
+      dockerfile: Dockerfile
+    container_name: 'eureka-server-service'
+
+  mail:
+    build:
+      context: /mail
+      dockerfile: Dockerfile
+    container_name: 'mail-service'
+
+  orders:
+    build:
+      context: /orders
+      dockerfile: Dockerfile
+    container_name: 'orders-service'
+
+  products:
+    build:
+      context: /products
+      dockerfile: Dockerfile
+    container_name: 'products-service'
+
+
   zookeeper:
     image: zookeeper:3.7.0
     container_name: zookeeper
